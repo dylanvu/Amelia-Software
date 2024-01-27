@@ -12,7 +12,7 @@ import base64
 def takePic():
     # initialize camera
     # 0: main camera, 1: external camera -> when using raspberry pi switch to 0 i think
-    cameraSource = 1
+    cameraSource = 0
     cam = cv2.VideoCapture(cameraSource)
     
     # open camera
