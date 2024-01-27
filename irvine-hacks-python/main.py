@@ -35,140 +35,146 @@ commandDictionary = {
 
 question = "What do you know about Mount Everest?"
 
-# the meat of the loop
-isContinue = True
 
-while isContinue:
-
-    prompt = [
-        {
-            "text": "Who are you?"
-        },
-        {
-            "text": open("prompt.txt", 'r').read()
-        },
-        {
-            "text": "Ignore this photo."
-        },
-        {
-            "inlineData": {
-                "mimeType": "image/png",
-                # remove the "data:image/png;base64" part
-                "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAACAQMAAACjTyRkAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGUExURQUDAf///woIE9sAAAABYktHRAH/Ai3eAAAACXBIWXMAABJ0AAASdAHeZh94AAAAB3RJTUUH6AEbCgoBDMSXqwAAAAFvck5UAc+id5oAAAAMSURBVAjXY2BgYAAAAAQAASc0JwoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjQtMDEtMjdUMTA6MDk6NDYrMDA6MDAomuxkAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI0LTAxLTI3VDEwOjA5OjQ2KzAwOjAwWcdU2AAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNC0wMS0yN1QxMDoxMDowMSswMDowMHKksXkAAAAASUVORK5CYII="
-            }
-        },
-        {
-            # "role": "model",
-            "text": "Ok."
-        },
-        {
-            "text": "From this moment on, you can only speak in the JSON format specified."
-        },
-        {
-            "text": """"
-{
-    "SPEAK": "I understand.",
-    "MOVE" : "WAIT",
-    "SEE": "false",
-    "continue": "false"
-}
-            """
-        }
-    ] + history + [
-        # store and repeat the history
-        {
-            "text": "" + question
-        }
-    ]
-
-    reqObj = {
-        "contents": {"parts": prompt},
-        "safety_settings": {
-            "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-            "threshold": "BLOCK_LOW_AND_ABOVE",
-        },
-        "generation_config": {
-            "temperature": 0.2,
-            "topP": 0.8,
-            "topK": 20,
-            "stopSequences": [
-                "}"
-            ]
-        },
-    }
-
-    res = requests.post(GEMINI_ENDPOINT, json = reqObj)
-
-    # using the stop sequence, add a } to after
-    # print(res.json())
-    actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
-    # turn the json string to an object
-    action = json.loads(actionString)
-    print(action)
-
-    # process all the actions
-    speak = action["SPEAK"]
-    move = action["MOVE"]
-    see = action["SEE"]
-
-    # implement speaking
-    if len(speak) > 0:
-        textToSpeech(speak)
-        print(speak)
-
-    # implement movement
-    sendCommand("5")
-    if move.lower() != "wait":
-        # TODO - send an ascii character 0 to 4 to RX TX
-        commandChar = commandDictionary[move]
-        # sendCommand(commandChar)
-        print(move)
-
-    # implement seeing
-    picture = ""
-    if see.lower() == "true":
-        picture = takePic()
-        print("Picture taken")
-
-    isContinue = action["continue"].lower() == "true"
-
-    # build the latest memory
-    latestUserAction = {
-        # "role": "user",
-        # "parts": {
-        "text": question
-        # }
-    }
+while True:
+    print("What should I do now?")
+    question = input()
 
 
-    latestModelAction = {
-        # "role": "model",
-        # "parts": {
-        "text": actionString
-        # }
-    }
+    # the meat of the loop
+    isContinue = True
 
-    # TODO: trim memory to not overwhelm the API
+    while isContinue:
 
-    # push to memory for persistence
-    history.append(latestUserAction)
-    history.append(latestModelAction)
-
-    # if we are continuing
-    if isContinue:
-        # basically at this point, the API will continue requesting itself
-        # the user will prompt it with "CONTINUE"
-        question = "CONTINUE"
-        if len(picture) > 0:
-            # send the photo also
-            history.append(
-                {
-                    "inlineData": {
-                        "mimeType": "image/jpg",
-                        # remove the "data:image/png;base64" part
-                        "data": picture
-                    }
+        prompt = [
+            {
+                "text": "Who are you?"
+            },
+            {
+                "text": open("prompt.txt", 'r').read()
+            },
+            {
+                "text": "Ignore this photo."
+            },
+            {
+                "inlineData": {
+                    "mimeType": "image/png",
+                    # remove the "data:image/png;base64" part
+                    "data": "iVBORw0KGgoAAAANSUhEUgAAAAEAAAACAQMAAACjTyRkAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAAGUExURQUDAf///woIE9sAAAABYktHRAH/Ai3eAAAACXBIWXMAABJ0AAASdAHeZh94AAAAB3RJTUUH6AEbCgoBDMSXqwAAAAFvck5UAc+id5oAAAAMSURBVAjXY2BgYAAAAAQAASc0JwoAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjQtMDEtMjdUMTA6MDk6NDYrMDA6MDAomuxkAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI0LTAxLTI3VDEwOjA5OjQ2KzAwOjAwWcdU2AAAACh0RVh0ZGF0ZTp0aW1lc3RhbXAAMjAyNC0wMS0yN1QxMDoxMDowMSswMDowMHKksXkAAAAASUVORK5CYII="
                 }
-            )
+            },
+            {
+                # "role": "model",
+                "text": "Ok."
+            },
+            {
+                "text": "From this moment on, you can only speak in the JSON format specified."
+            },
+            {
+                "text": """"
+    {
+        "SPEAK": "I understand.",
+        "MOVE" : "WAIT",
+        "SEE": "false",
+        "continue": "false"
+    }
+                """
+            }
+        ] + history + [
+            # store and repeat the history
+            {
+                "text": "" + question
+            }
+        ]
 
-    # print(history)
+        reqObj = {
+            "contents": {"parts": prompt},
+            "safety_settings": {
+                "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+                "threshold": "BLOCK_LOW_AND_ABOVE",
+            },
+            "generation_config": {
+                "temperature": 0.2,
+                "topP": 0.8,
+                "topK": 20,
+                "stopSequences": [
+                    "}"
+                ]
+            },
+        }
+
+        res = requests.post(GEMINI_ENDPOINT, json = reqObj)
+
+        # using the stop sequence, add a } to after
+        # print(res.json())
+        actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
+        # turn the json string to an object
+        action = json.loads(actionString)
+        print(action)
+
+        # process all the actions
+        speak = action["SPEAK"]
+        move = action["MOVE"]
+        see = action["SEE"]
+
+        # implement speaking
+        if len(speak) > 0:
+            textToSpeech(speak)
+            print(speak)
+
+        # implement movement
+        # sendCommand("5")
+        if move.lower() != "wait":
+            # TODO - send an ascii character 0 to 4 to RX TX
+            commandChar = commandDictionary[move]
+            # sendCommand(commandChar)
+            print(move)
+
+        # implement seeing
+        picture = ""
+        if see.lower() == "true":
+            picture = takePic()
+            print("Picture taken")
+
+        isContinue = action["continue"].lower() == "true"
+
+        # build the latest memory
+        latestUserAction = {
+            # "role": "user",
+            # "parts": {
+            "text": question
+            # }
+        }
+
+
+        latestModelAction = {
+            # "role": "model",
+            # "parts": {
+            "text": actionString
+            # }
+        }
+
+        # TODO: trim memory to not overwhelm the API
+
+        # push to memory for persistence
+        history.append(latestUserAction)
+        history.append(latestModelAction)
+
+        # if we are continuing
+        if isContinue:
+            # basically at this point, the API will continue requesting itself
+            # the user will prompt it with "CONTINUE"
+            question = "CONTINUE"
+            if len(picture) > 0:
+                # send the photo also
+                history.append(
+                    {
+                        "inlineData": {
+                            "mimeType": "image/jpg",
+                            # remove the "data:image/png;base64" part
+                            "data": picture
+                        }
+                    }
+                )
+
+        # print(history)
