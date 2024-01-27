@@ -4,13 +4,9 @@
         # -> translate the text to the desired language       
     # plays out the text to one's speakers
     
-# def TranslateText(text, langFrom, langTo):
-    # langFrom, langTo
-    # convert text to the language we want to translate to
-    # return the converted text
-    
-# def listVoices(lang_code):
-    # lists out google cloud api voices it has
+# def findCorrectVoice(langTo):
+    # helper function to textToSpeech
+    # langto: takes in string of the language code
 
 from google.cloud import texttospeech
 from google.cloud import translate_v2 as translate
@@ -21,26 +17,18 @@ os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../google_secret_key.json'
 
 # Function to turn Text into speech
 # text: (str) to be played out
-# langTo: (str) that has google cloud translate language code, on to which language the text should be translated to
-# check_translate: (boolean) check if we need to translate
-# filename: (str) that has the filename we want to write the outputted mp3 to
-def TextToSpeech(text, langTo, check_translate, filename):
+def textToSpeech(text):
     # initiate text to speech client
     client = texttospeech.TextToSpeechClient()
     translate_client = translate.Client()
-
+  
+    # detect language -> get lang code -> call findCorrectVoice
+    langTo = translate_client.detect_language(text)["language"]
+    
     #get correct voice bank
     voiceArr = findCorrectVoice(langTo)
     print(voiceArr[0], voiceArr[1])
     
-    # if we translate translate here
-    if check_translate == True:
-        # translate the text
-        text = translateText(text, langTo)
-        
-        
-    
-    print(text)
     # choose text to be synthesized
     synthesis_input = texttospeech.SynthesisInput(text=text)
 
@@ -63,6 +51,7 @@ def TextToSpeech(text, langTo, check_translate, filename):
     )
 
     # The response's audio_content is binary.
+    filename = "output.mp3"
     with open(filename, "wb") as out:
         out.write(response.audio_content)
         print('Audio content written to file filename')
@@ -70,21 +59,6 @@ def TextToSpeech(text, langTo, check_translate, filename):
     
     # play sound to speakers
     playsound(filename)
-
-# translateText -> takes in str and translate it to desired language, returns string of translated text
-# text: (str) text to be translated
-# langTo: (str) language code to be translated to
-def translateText(text, langTo):
-    translate_client = translate.Client()
-    
-    if isinstance(text, bytes):
-        text = text.decode("utf-8")
-
-    # Text can also be a sequence of strings, in which case this method
-    # will return a sequence of results for each text.
-    result = translate_client.translate(text, target_language=langTo)["translatedText"]
-
-    return result
 
 # function to grab voice selection and language code
 # lang_code: (str) string that says what language it should be translated to
@@ -101,8 +75,9 @@ def findCorrectVoice(lang_code):
             return [voice.name, voice.language_codes[0]]
 
 
-TextToSpeech("I am a woman", "en-US", False, "output.mp3")
-# TextToSpeech("I am a woman", "es", True, "output.mp3")
+# TextToSpeech("I am a woman", "en-US", False)
+# TextToSpeech("Tôi tên là Amelia.")
+textToSpeech("Tôi yêu đàn ông.")
 
 # print(translateText("I am a woman", "vi"))
 
