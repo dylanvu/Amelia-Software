@@ -23,7 +23,7 @@ GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemi
 # and will alternate between user -> model, always ending in model
 history = []
 
-question = "What do you know about the Big Ben?"
+question = "What landmark is this?"
 
 # the meat of the loop
 isContinue = True
@@ -143,15 +143,14 @@ while isContinue:
         question = "CONTINUE"
         if len(picture) > 0:
             # send the photo also
-            # history.append(
-            #     {
-            #         "role": "user",
-            #         "parts": {
-            #             "text": question
-            #         }
-            #     }
-            # )
-            pass
-
+            history.append(
+                {
+                    "inlineData": {
+                        "mimeType": "image/jpg",
+                        # remove the "data:image/png;base64" part
+                        "data": picture
+                    }
+                }
+            )
 
     # print(history)
