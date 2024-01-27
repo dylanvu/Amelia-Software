@@ -4,6 +4,7 @@ import requests
 import json
 from camera import takePic
 from text2speech import textToSpeech
+from rpiSerial import sendCommand
 
 load_dotenv()  # take environment variables from .env.
 
@@ -23,6 +24,14 @@ GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemi
 '''
 # and will alternate between user -> model, always ending in model
 history = []
+
+commandDictionary = {
+    "FORWARD": "0",
+    "BACKWARD": "1",
+    "TURNLEFT": "2",
+    "TURNRIGHT": "3",
+    "WAIT": "4"
+}
 
 question = "What do you know about Mount Everest?"
 
@@ -108,8 +117,11 @@ while isContinue:
         print(speak)
 
     # implement movement
+    sendCommand("5")
     if move.lower() != "wait":
         # TODO - send an ascii character 0 to 4 to RX TX
+        commandChar = commandDictionary[move]
+        # sendCommand(commandChar)
         print(move)
 
     # implement seeing
