@@ -19,6 +19,9 @@ int currentMovement = 0;
 void setup()
 {
     Serial.begin(9600);
+    Serial.println("Ready to move!");
+    // DEBUG UART
+    pinMode(2, OUTPUT);
 }
 
 void loop()
@@ -71,28 +74,39 @@ void loop()
     switch (currentMovement)
     {
     case 48:
+        // "0"
         Serial.println("FORWARD");
         moved = true;
         break;
     case 49:
+        // "1"
         Serial.println("BACKWARD");
         moved = true;
         break;
     case 50:
+        // "2"
         Serial.println("TURNLEFT");
         moved = true;
         break;
     case 51:
+        // "3"
         Serial.println("TURNRIGHT");
         moved = true;
         break;
     case 52:
+        // "4"
         Serial.println("WAIT");
         moved = true;
+        break;
+    case 53:
+        // "5"
+        // meant for debugging UART communication
+        digitalWrite(2, HIGH);
         break;
     default:
         // Serial.println("UNKNOWN");
         // TODO: make it wait
+        // digitalWrite(2, HIGH);
         break;
     }
 
