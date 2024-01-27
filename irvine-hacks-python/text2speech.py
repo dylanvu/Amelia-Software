@@ -52,6 +52,12 @@ def textToSpeech(text):
 
     # The response's audio_content is binary.
     filename = "output.mp3"
+
+    # Check if the file already exists
+    if os.path.exists(filename):
+        os.remove(filename)
+        print(f"Previous {filename} removed.")
+
     with open(filename, "wb") as out:
         out.write(response.audio_content)
         print('Audio content written to file filename')
@@ -59,6 +65,8 @@ def textToSpeech(text):
     
     # play sound to speakers
     playsound(filename)
+
+    # delete the file
 
 # function to grab voice selection and language code
 # lang_code: (str) string that says what language it should be translated to
