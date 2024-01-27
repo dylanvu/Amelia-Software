@@ -24,7 +24,7 @@ GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemi
 # and will alternate between user -> model, always ending in model
 history = []
 
-question = "What landmark is this?"
+question = "What do you know about Mount Everest?"
 
 # the meat of the loop
 isContinue = True
