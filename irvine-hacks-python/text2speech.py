@@ -27,7 +27,7 @@ def textToSpeech(text):
     
     #get correct voice bank
     voiceArr = findCorrectVoice(langTo)
-    print(voiceArr[0], voiceArr[1])
+    # print(voiceArr[0], voiceArr[1])
     
     # choose text to be synthesized
     synthesis_input = texttospeech.SynthesisInput(text=text)
@@ -56,11 +56,11 @@ def textToSpeech(text):
     # Check if the file already exists
     if os.path.exists(filename):
         os.remove(filename)
-        print(f"Previous {filename} removed.")
+        # print(f"Previous {filename} removed.")
 
     with open(filename, "wb") as out:
         out.write(response.audio_content)
-        print('Audio content written to file filename')
+        # print('Audio content written to file filename')
         out.close()
     
     # play sound to speakers

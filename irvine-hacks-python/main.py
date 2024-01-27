@@ -124,7 +124,7 @@ while True:
 
         # implement movement
         # sendCommand("5")
-        if move.lower() != "wait":
+        if len(move.lower()) > 0:
             # TODO - send an ascii character 0 to 4 to RX TX
             commandChar = commandDictionary[move]
             # sendCommand(commandChar)
@@ -170,7 +170,7 @@ while True:
                 history.append(
                     {
                         "inlineData": {
-                            "mimeType": "image/jpg",
+                            "mimeType": "image/jpeg",
                             # remove the "data:image/png;base64" part
                             "data": picture
                         }
