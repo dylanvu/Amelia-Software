@@ -39,7 +39,7 @@ def takePic():
 # image parameter: numpy.ndarray
 def convertImage64(image):
     retval, buffer = cv2.imencode('.jpg', image)
-    image64_String = base64.b64encode(buffer)
+    image64_String = base64.b64encode(buffer).decode("utf-8")
     return image64_String
 
 # function to send over image, call API to send over?

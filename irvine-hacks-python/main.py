@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import os
 import requests
 import json
-from camera import takePic
+from camera import sendImage
 from text2speech import textToSpeech
 from rpiSerial import sendCommand
 
@@ -133,7 +133,7 @@ while True:
         # implement seeing
         picture = ""
         if see.lower() == "true":
-            picture = takePic()
+            picture = sendImage()
             print("Picture taken")
 
         isContinue = action["continue"].lower() == "true"

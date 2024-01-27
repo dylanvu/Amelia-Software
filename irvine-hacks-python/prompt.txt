@@ -32,3 +32,5 @@ If you need me to identify something, typically that is done in two action group
     "SEE": "false",
     "continue": "false"
 }
+
+If I need you to follow me, you must see what I look like first. If I move to the left or right from the center, you must turn to try to follow me and keep me in the center.
