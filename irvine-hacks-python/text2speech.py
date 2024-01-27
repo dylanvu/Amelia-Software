@@ -1,4 +1,3 @@
-# TODO:
 # def TextToSpeech(text, lang_code, check_translate):
     # inputs: text (str), lang (str), check_translate (bool)
     # if check_translate is true 
@@ -30,14 +29,16 @@ def TextToSpeech(text, langTo, check_translate, filename):
     client = texttospeech.TextToSpeechClient()
     translate_client = translate.Client()
 
+    #get correct voice bank
+    voiceArr = findCorrectVoice(langTo)
+    print(voiceArr[0], voiceArr[1])
+    
     # if we translate translate here
     if check_translate == True:
         # translate the text
         text = translateText(text, langTo)
         
-        #get correct voice bank
-        voiceArr = findCorrectVoice(langTo)
-        print(voiceArr[0], voiceArr[1])
+        
     
     print(text)
     # choose text to be synthesized
@@ -100,7 +101,7 @@ def findCorrectVoice(lang_code):
             return [voice.name, voice.language_codes[0]]
 
 
-# TextToSpeech("I am a woman", "en-US", False, "output.mp3")
+TextToSpeech("I am a woman", "en-US", False, "output.mp3")
 # TextToSpeech("I am a woman", "es", True, "output.mp3")
 
 # print(translateText("I am a woman", "vi"))
