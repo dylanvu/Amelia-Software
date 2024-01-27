@@ -3,6 +3,7 @@ import os
 import requests
 import json
 from camera import takePic
+from text2speech import textToSpeech
 
 load_dotenv()  # take environment variables from .env.
 
@@ -102,15 +103,20 @@ while isContinue:
     see = action["SEE"]
 
     # implement speaking
-    # TODO
+    if len(speak) > 0:
+        textToSpeech(speak)
+        print(speak)
 
     # implement movement
-    # TODO - send an ascii character 0 to 4 to RX TX
+    if move.lower() != "wait":
+        # TODO - send an ascii character 0 to 4 to RX TX
+        print(move)
 
     # implement seeing
     picture = ""
     if see.lower() == "true":
         picture = takePic()
+        print("Picture taken")
 
     isContinue = action["continue"].lower() == "true"
 
