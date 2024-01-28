@@ -162,12 +162,11 @@ while active:
         if too_many_repeat_movements >= 2:
             isContinue = 'false' # TESTTTTTTT
 
-        # # implement movement
-        sendCommand("5")
+        # implement movement
         if len(move.lower()) > 0:
         #     # TODO - send an ascii character 0 to 4 to RX TX
-        #     commandChar = commandDictionary[move]
-        #     sendCommand(commandChar)
+            commandChar = commandDictionary[move]
+            sendCommand(commandChar)
             print(move)
 
         # implement seeing
