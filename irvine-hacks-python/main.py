@@ -134,7 +134,13 @@ while active:
 
         # using the stop sequence, add a } to after
         print(res.json(),'\n') # DEBUG
-        actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
+        try:
+            actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
+        except Exception as e:
+            print("actionString exception")
+            textToSpeech("I did not quite catch that.")
+            continue
+
         # turn the json string to an object
         action = json.loads(actionString)
         print(action) # DEBUG
