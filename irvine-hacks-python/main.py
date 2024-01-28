@@ -55,6 +55,9 @@ prompt_file = 'travel_prompt.txt' if mode == 0 else 'partner_prompt.txt'
 question = transcription
 print("Mode:", mode)
 
+too_many_repeat_movements = 0
+current_movement = ''
+
 question = transcription
 
 while active:
@@ -132,11 +135,12 @@ while active:
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
         # using the stop sequence, add a } to after
-        print(res.json())
+        print(res.json(),'\n') # DEBUG
         actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         # turn the json string to an object
         action = json.loads(actionString)
-        print(action)
+        print(action) # DEBUG
+        print() # DEBUG
 
         # process all the actions
         speak = action["SPEAK"]
@@ -152,6 +156,13 @@ while active:
         if 'goodbye' in speak.lower():
             active = False
             break
+
+        if move != '4' and current_movement == move:
+            too_many_repeat_movements += 1
+        else:
+            too_many_repeat_movements = 0
+        if too_many_repeat_movements >= 2:
+            isContinue = 'false' # TESTTTTTTT
 
         # implement movement
         # sendCommand("5")

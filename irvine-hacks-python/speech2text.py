@@ -227,7 +227,6 @@ def listen_until_wake(api_key, recognizer, microphone):
     ]]
     while True:
         transcription = listen(recognizer, microphone, api_key)
-        print("wake-word-listen:",transcription)
         keyword = None
         for greeting in simliar_wakeup_words[0]:
             if greeting.lower() in transcription.lower() and \
@@ -239,6 +238,7 @@ def listen_until_wake(api_key, recognizer, microphone):
         if keyword:
             index = transcription.lower().find(keyword)
             new_transcription = transcription[index:]
+            print("wake-word-listen-substring:",transcription)
             break
     return new_transcription
         
