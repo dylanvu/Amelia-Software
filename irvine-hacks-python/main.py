@@ -102,4 +102,9 @@ while isContinue:
         # the user will prompt it with "CONTINUE"
         question = "CONTINUE"
 
-    # print(history)
+    # print(history)'
+    
+    
+    # list_until_keyword("name")
+    # textToSpeech("Hey what do you want me to do")
+    # list_until_keyword("the modes")
