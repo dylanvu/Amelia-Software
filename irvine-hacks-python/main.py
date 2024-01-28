@@ -133,7 +133,7 @@ while active:
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
         # using the stop sequence, add a } to after
-        print(res.json(),'\n') # DEBUG
+        # print(res.json(),'\n') # DEBUG
         actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         # turn the json string to an object
         action = json.loads(actionString)
