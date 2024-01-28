@@ -24,9 +24,14 @@
     * Use `pyenv global <version>` to swap versions
 
 # Installation and Deployment
+* Our code works with Python version 3.8.0
 * Note: `pyaudio` must be installed. It is a platform/OS dependent package.
-* Windows
-    * You will get an error in `Pyaudio`
-    * Run `pip install pipwin`
-    * Run `pipwin install pyaudio`
-    
+    * Windows
+        * You will get an error in `Pyaudio`
+        * Run `pip install pipwin`
+        * Run `pipwin install pyaudio`
+    * Raspberry Pi
+        * Basically, follow this: https://medium.com/@niveditha.itengineer/learn-how-to-setup-portaudio-and-pyaudio-in-ubuntu-to-play-with-speech-recognition-8d2fff660e94
+        * Run `sudo apt-get install python-pyaudio python3-pyaudio`
+        * Run `sudo apt-get install libasound-dev`
+        * Run `pip install pyaudio`
