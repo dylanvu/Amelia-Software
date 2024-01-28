@@ -1,3 +1,5 @@
+import time
+import serial
 
 def sendCommand(command, ser):
     print(f"Sending {command}")
@@ -6,9 +8,13 @@ def sendCommand(command, ser):
     # commandBytes = command.encode('utf-8')
     ser.write(bytes(command, "utf-8"))
     # while True:
-        # pass
+    #     pass
     # print(commandBytes)
     # ser.close()
 
 if __name__ == "__main__":
-    sendCommand("0")
+    port = "/dev/ttyUSB0" # rpi
+    # port = "COM9" # windows
+    ser = serial.Serial(port=port, baudrate=115200, timeout=0.1)
+    time.sleep(2)
+    sendCommand("0", ser)

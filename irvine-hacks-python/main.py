@@ -185,8 +185,10 @@ while active:
         # implement seeing
         picture = ""
         if see.lower() == "true":
+            textToSpeech("I'll take a look.")
             picture = sendImage()
             print("Picture taken")
+            textToSpeech("Okay, let me think.")
 
         isContinue = action["continue"].lower() == "true"
 

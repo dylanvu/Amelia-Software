@@ -2,7 +2,7 @@
 
 // counter for how long to drive for, before stopping/switching movement options
 // tweak this variable to affect how far the bot drives
-const static int movementTimeLimit = 1000;
+const static int movementTimeLimit = 3000;
 
 int incomingByte = 52;
 bool moving = false;
@@ -32,7 +32,7 @@ void stop();
 
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     Serial.println("Ready to move!");
     // DEBUG UART
     pinMode(2, OUTPUT);
