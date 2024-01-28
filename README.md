@@ -20,3 +20,13 @@
     * First, connect the ground betwee nthe pi and the arduino
     * Then, run `sudo chmod 666 /dev/ttyS0`
     * Remember to match the baud rates: `stty -F /dev/ttyS0 <baud_rate>`
+* Installing python versions, using pyenv: https://github.com/pyenv/pyenv
+    * Use `pyenv global <version>` to swap versions
+
+# Installation and Deployment
+* Note: `pyaudio` must be installed. It is a platform/OS dependent package.
+* Windows
+    * You will get an error in `Pyaudio`
+    * Run `pip install pipwin`
+    * Run `pipwin install pyaudio`
+    

@@ -38,7 +38,7 @@ commandDictionary = {
 }
 
 ### start 
-question = "What do you know about Mount Everest?"
+# question = "What do you know about Mount Everest?"
 active = True
 
 
@@ -51,12 +51,11 @@ microphone = sr.Microphone()
 transcription, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
 # mode = 0 --> travel
 # mode = 1 --> lovers
-
 prompt_file = 'travel_prompt.txt' if mode == 0 else 'partner_prompt.txt'
+question = transcription
+print("Mode:", mode)
 
 question = transcription
-# print("Starting Question:", question)
-print("Mode:", mode)
 
 while active:
     if mode is None:
@@ -133,7 +132,7 @@ while active:
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
         # using the stop sequence, add a } to after
-        # print(res.json())
+        print(res.json())
         actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         # turn the json string to an object
         action = json.loads(actionString)
