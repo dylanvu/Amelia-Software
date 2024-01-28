@@ -12,6 +12,9 @@ import serial
 
 load_dotenv()  # take environment variables from .env.
 
+textToSpeech("Give me a moment to figure out what's going on.")
+
+
 KEY = os.getenv("GEMINI_API_KEY")
 # GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={KEY}"
 GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key={KEY}"
