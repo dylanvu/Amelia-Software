@@ -60,11 +60,11 @@ def listen_until_keyword(api_key, keywords, recognizer, microphone):
 
         if 'who are you' in transcription.lower():
             textToSpeech("Hi I'm Amelia, I'm a robotic companion who has a brain, eyes, ears, mouth, and legs\
-                        I can think through Google Cloud's Gemini LLM. \
-                        I can see through a camera by utilizing OpenCV. \
-                        I listen with OpenAI's whisper speech recognition model API. \
-                        I talk through Google Cloud's text to speech model API. \
-                        And I walk using adruino nanos, motors, and circuits.")
+                        I can think through Google Cloud's Gemini LLM \
+                        I can see through a camera by utilizing OpenCV \
+                        I listen with OpenAI's whisper speech recognition model API \
+                        I talk through Google Cloud's text to speech model API \
+                        And I walk using adruino nanos, motors, and circuits")
             continue
         
         # 2d array
