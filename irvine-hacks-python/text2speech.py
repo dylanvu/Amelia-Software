@@ -10,8 +10,9 @@
 
 from google.cloud import texttospeech
 from google.cloud import translate_v2 as translate
-from playsound import playsound
 import os
+import pygame
+pygame.init()
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './google_secret_key.json'
 
@@ -64,9 +65,10 @@ def textToSpeech(text):
         out.close()
     
     # play sound to speakers
-    playsound(filename)
+    # playsound(filename)
+    sound = pygame.mixer.Sound(filename)
+    sound.play()
 
-    # delete the file
 
 # function to grab voice selection and language code
 # lang_code: (str) string that says what language it should be translated to
