@@ -75,15 +75,15 @@ def findCorrectVoice(lang_code):
             return [voice.name, voice.language_codes[0]]
 
 
-# TextToSpeech("I am a woman", "en-US", False)
-# TextToSpeech("Tôi tên là Amelia.")
-textToSpeech("Tôi yêu đàn ông.")
+# # TextToSpeech("I am a woman", "en-US", False)
+# # TextToSpeech("Tôi tên là Amelia.")
+# textToSpeech("Tôi yêu đàn ông.")
 
-# print(translateText("I am a woman", "vi"))
+# # print(translateText("I am a woman", "vi"))
 
-# listVoices("vi")
+# # listVoices("vi")
 
-# print(findCorrectVoice("vi"))
+# # print(findCorrectVoice("vi"))
 
 
 
