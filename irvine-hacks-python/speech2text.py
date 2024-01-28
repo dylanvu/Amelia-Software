@@ -5,8 +5,6 @@ from text2speech import textToSpeech
 # from recognize_whisper_api import recognize_whisper_api as whisper_api
 load_dotenv()
 # maybe
-import threading
-import time
 
 
 # def find_microphone_index(device='USBAudio2.0'):
@@ -145,11 +143,13 @@ def startUp(api_key, recognizer, microphone):
         "lovermode_words": ["girlfriend", "boyfriend", "partner", "lover"],
         "travel_words": ["travel", "gravel"]
     }
+
+    textToSpeech("I'm finished filtering out background noise. Ready when you are!")
     
     # inital wake up (call for amelia)
     listen_until_keyword(api_key, simliar_wakeup_words, recognizer, microphone)
     # response (ask for the mode)
-    textToSpeech("Hey what do you want me to do today?")
+    textToSpeech("Hey, what do you want me to do today?")
     # wait for user to give the mode
     transcription, keyword = listen_until_keyword(api_key, mode_words, recognizer, microphone)
     
@@ -178,6 +178,7 @@ def mainLoop(api_key, recognizer, microphone):
 # returns transcription, mode
 def init(api_key, recognizer, microphone):
     OPENAI_API_KEY = api_key
+    textToSpeech("I am filtering out background noise. Please be quiet for a moment!")
     adjust_ambient_noise(recognizer, microphone)
     # call start up
     return startUp(OPENAI_API_KEY, recognizer, microphone)
