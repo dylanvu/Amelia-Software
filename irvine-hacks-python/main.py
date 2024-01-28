@@ -60,7 +60,7 @@ question, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
 print("past init")
 # mode = 1 --> travel
 # mode = 2 --> lovers
-prompt_file = 'travel_prompt.txt' if mode == 1 else 'partner_prompt.txt'
+prompt_file = 'travel_prompt.txt' if mode == 0 else 'partner_prompt.txt'
 print("Mode:", mode)
 
 too_many_repeat_movements = 0
