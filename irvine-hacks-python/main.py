@@ -4,7 +4,7 @@ import requests
 import json
 from camera import sendImage
 from text2speech import textToSpeech
-# from rpiSerial import sendCommand
+from rpiSerial import sendCommand
 import speech2text
 import speech_recognition as sr
 
