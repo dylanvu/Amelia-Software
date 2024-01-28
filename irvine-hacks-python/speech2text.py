@@ -5,7 +5,6 @@ from text2speech import textToSpeech
 load_dotenv()
 
 
-
 # def find_microphone_index(device='USBAudio2.0'):
 #     mics = sr.Microphone.list_microphone_names()
 #     mic_index = None
