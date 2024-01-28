@@ -64,3 +64,4 @@ Other members learned how to utilze ai / nlp tools in an application. More usefu
         * Run `sudo apt-get install python-pyaudio python3-pyaudio`
         * Run `sudo apt-get install libasound-dev`
         * Run `pip install pyaudio`
+        * Change audio: `alsamixer`
