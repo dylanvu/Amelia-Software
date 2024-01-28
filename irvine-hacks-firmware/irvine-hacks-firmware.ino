@@ -9,11 +9,13 @@ bool moving = false;
 int moveCounter = 0;
 int currentMovement = 0;
 
-const int ENABLE = 2;
+const int ENABLE_RIGHT = 14;
+const int ENABLE_LEFT = 15;
+
 // Motor 1
 // right side
-const int RIGHT_SIDE_1 = 3;
-const int RIGHT_SIDE_2 = 4;
+const int RIGHT_SIDE_1 = 16;
+const int RIGHT_SIDE_2 = 17;
 // Motor 2
 // left side
 const int LEFT_SIDE_1 = 18;
@@ -34,6 +36,11 @@ void setup()
     Serial.println("Ready to move!");
     // DEBUG UART
     pinMode(2, OUTPUT);
+
+    // set enable
+    pinMode(ENABLE_RIGHT, OUTPUT);
+    pinMode(ENABLE_LEFT, OUTPUT);
+
 
     // set pin modes of motor
     pinMode(RIGHT_SIDE_1, OUTPUT);
@@ -83,25 +90,25 @@ void loop()
     {
     case 48:
         // "0"
-        // Serial.println("FORWARD");
+        Serial.println("FORWARD");
         moved = true;
         Forward();
         break;
     case 49:
         // "1"
-        // Serial.println("BACKWARD");
+        Serial.println("BACKWARD");
         moved = true;
         turnBack();
         break;
     case 50:
         // "2"
-        // Serial.println("TURNLEFT");
+        Serial.println("TURNLEFT");
         moved = true;
         turnLeft();
         break;
     case 51:
         // "3"
-        // Serial.println("TURNRIGHT");
+        Serial.println("TURNRIGHT");
         moved = true;
         turnRight();
         break;
@@ -129,7 +136,7 @@ void loop()
     {
         // increment movement counter
         moveCounter++;
-        Serial.println(moveCounter);
+        // Serial.println(moveCounter);
     }
 
     // check if we are done with the movement
@@ -147,12 +154,13 @@ void turnRight()
 {
 
     digitalWrite(RIGHT_SIDE_1, HIGH); // HIGH --> reverse, LOW --> forward
-    digitalWrite(RIGHT_SIDE_2, LOW);       // LOW --> reverse, HIGH --> forward
+    digitalWrite(RIGHT_SIDE_2, LOW);  // LOW --> reverse, HIGH --> forward
 
-    digitalWrite(LEFT_SIDE_1, LOW);  // LOW --> forward
-    digitalWrite(LEFT_SIDE_2, HIGH); // HIGH --> forward
+    digitalWrite(LEFT_SIDE_1, HIGH);  // LOW --> forward
+    digitalWrite(LEFT_SIDE_2, LOW); // HIGH --> forward
 
-    digitalWrite(ENABLE, HIGH);
+    digitalWrite(ENABLE_RIGHT, HIGH);
+    digitalWrite(ENABLE_LEFT, HIGH);
 }
 void turnBack()
 {
@@ -160,10 +168,11 @@ void turnBack()
     digitalWrite(RIGHT_SIDE_1, HIGH);
     digitalWrite(RIGHT_SIDE_2, LOW);
 
-    digitalWrite(LEFT_SIDE_1, HIGH);
-    digitalWrite(LEFT_SIDE_2, LOW);
+    digitalWrite(LEFT_SIDE_1, LOW);
+    digitalWrite(LEFT_SIDE_2, HIGH);
 
-    digitalWrite(ENABLE, HIGH);
+    digitalWrite(ENABLE_RIGHT, HIGH);
+    digitalWrite(ENABLE_LEFT, HIGH);
 }
 
 void turnLeft()
@@ -172,10 +181,11 @@ void turnLeft()
     digitalWrite(RIGHT_SIDE_1, LOW);
     digitalWrite(RIGHT_SIDE_2, HIGH);
 
-    digitalWrite(LEFT_SIDE_1, HIGH);
-    digitalWrite(LEFT_SIDE_2, LOW);
+    digitalWrite(LEFT_SIDE_1, LOW);
+    digitalWrite(LEFT_SIDE_2, HIGH);
 
-    digitalWrite(ENABLE, HIGH);
+    digitalWrite(ENABLE_RIGHT, HIGH);
+    digitalWrite(ENABLE_LEFT, HIGH);
 }
 
 void Forward()
@@ -184,12 +194,14 @@ void Forward()
     digitalWrite(RIGHT_SIDE_1, LOW);
     digitalWrite(RIGHT_SIDE_2, HIGH);
 
-    digitalWrite(LEFT_SIDE_1, LOW);
-    digitalWrite(LEFT_SIDE_2, HIGH);
+    digitalWrite(LEFT_SIDE_1, HIGH);
+    digitalWrite(LEFT_SIDE_2, LOW);
 
-    digitalWrite(ENABLE, HIGH);
+    digitalWrite(ENABLE_RIGHT, HIGH);
+    digitalWrite(ENABLE_LEFT, HIGH);
 }
 void stop()
 {
-    digitalWrite(ENABLE, LOW);
+    digitalWrite(ENABLE_RIGHT, LOW);
+    digitalWrite(ENABLE_LEFT, LOW);
 }
