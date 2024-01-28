@@ -13,7 +13,7 @@ from google.cloud import translate_v2 as translate
 from playsound import playsound
 import os
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../google_secret_key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './google_secret_key.json'
 
 # Function to turn Text into speech
 # text: (str) to be played out
@@ -21,7 +21,7 @@ def textToSpeech(text):
     # initiate text to speech client
     client = texttospeech.TextToSpeechClient()
     translate_client = translate.Client()
-  
+
     # detect language -> get lang code -> call findCorrectVoice
     langTo = translate_client.detect_language(text)["language"]
     
