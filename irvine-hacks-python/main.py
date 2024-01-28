@@ -147,12 +147,18 @@ while active:
             actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         except Exception as e:
             print("actionString exception")
-            textToSpeech("I did not quite catch that.")
+            textToSpeech("I didn't quite catch that, sorry!")
             continue
-
-        # turn the json string to an object
-        action = json.loads(actionString)
-        print(action) # DEBUG
+        
+        action = None
+        try:
+            # turn the json string to an object
+            action = json.loads(actionString)
+        except Exception as e:
+            print(actionString)
+            print(action) # DEBUG
+            textToSpeech("I didn't quite catch that, sorry!.")
+            continue
         # print() # DEBUG
 
         # process all the actions
