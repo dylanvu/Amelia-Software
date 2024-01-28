@@ -165,11 +165,11 @@ while active:
             isContinue = 'false' # TESTTTTTTT
 
         # implement movement
-        # sendCommand("5")
+        sendCommand("5")
         if len(move.lower()) > 0:
             # TODO - send an ascii character 0 to 4 to RX TX
             commandChar = commandDictionary[move]
-            # sendCommand(commandChar)
+            sendCommand(commandChar)
             print(move)
 
         # implement seeing
