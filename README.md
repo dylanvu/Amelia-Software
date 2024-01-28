@@ -44,6 +44,7 @@ Other members learned how to utilze ai / nlp tools in an application. More usefu
 
 # Resources Used
 * Pi Serial UART Communication: https://www.electronicwings.com/raspberry-pi/raspberry-pi-uart-communication-using-python-and-c
+    * the weird 2 second delay: https://stackoverflow.com/a/57126149
 * If you get serial permission denied: https://askubuntu.com/questions/210177/serial-port-terminal-cannot-open-dev-ttys0-permission-denied
     * First, connect the ground betwee nthe pi and the arduino
     * Then, run `sudo chmod 666 /dev/ttyS0`
