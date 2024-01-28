@@ -1,6 +1,8 @@
 import speech_recognition as sr
 from dotenv import load_dotenv
 import os
+from text2speech import textToSpeech
+# from recognize_whisper_api import recognize_whisper_api as whisper_api
 load_dotenv()
 
 
@@ -46,54 +48,143 @@ def listen(recognizer, microphone, OPENAI_API_KEY):
     return transcription
 
 
+# listens until keyword,
+# stops looking for keyword after it is found
 def listen_until_keyword(api_key, keywords, recognizer, microphone):
     while True:
         transcription = listen(recognizer, microphone, api_key)
-        # check if the transcription contains the keyword
         print("wake-word-listen:",transcription)
-        if any(keyword.lower() in transcription.lower() for keyword in keywords):
-            print("Keyword detected...")
-            break
+        keyword = None
+        
+        # 2d array
+        if isinstance(keywords, list) and any(isinstance(item, list) for item in keywords):
+            for greeting in keywords[0]:
+                if greeting.lower() in transcription.lower() and \
+                any(name.lower() in transcription.lower() for name in keywords[1]):
+                    print("Keyword detected...")
+                    keyword = greeting.lower()
+                    print("keyword")
+                    break
+            if keyword:
+                break
+        # 1d array
+        else:
+            for greeting in keywords:
+                if greeting.lower() in transcription.lower():
+                    print("Keyword detected...")
+                    keyword = greeting.lower()
+                    print("keyword")
+                    break
+            if keyword:
+                break
+        textToSpeech("Sorry can you say that again?")
+
+    return transcription, keyword
+
+# Starts Up the seech to text, returns the mode Amelia should talk to you in
+def startUp(api_key, recognizer, microphone):
+    # listensforNameKeyword
+    # "what do you want me to do today / what mode"
+    # listens for mode
+    # sets mode
     
-    # Start recording longer segments until a pause is detected
-    transcription = listen(recognizer, microphone, api_key)
-    print("speech-to-text:",transcription)
-    # check if the user is done talking?
+    # initializing words list
+    simliar_wakeup_words = [
+        [
+        "Hey",
+        "A",
+        "Say",
+        "Hey",
+        "Hey",
+        "Hey",
+        "They",
+        "Hey",
+        "Hey",
+        "Play",
+        "Stay",
+        "May",
+        "Lay",
+        "Hey",
+        "Hey",
+        "Hey"
+        ],
+        [
+        "Emilia",
+        "Amelia",
+        "Amelia",
+        "Familia",
+        "Ophelia",
+        "Camellia",
+        "Amelia",
+        "Amelia",
+        "Cecilia",
+        "Amelia",
+        "Amelia",
+        "Amelia",
+        "Amelia",
+        "Media",
+        "Amalia",
+        "Emilio"
+    ]]
+    
+    mode_words = [
+        "Girlfriend",
+        "Boyfriend",
+        "Partner",
+        "Lover",
+        "Travel Buddy",
+        "Travel Mode",
+        "Travel Companion",
+        "Travel Buddy"
+    ]
+    
+    modes_dictionary = {
+        "lovermode_words": ["girlfriend", "boyfriend", "partner", "lover"],
+        "travel_words": ["travel", "gravel"]
+    }
+    
+    # inital wake up (call for amelia)
+    listen_until_keyword(api_key, simliar_wakeup_words, recognizer, microphone)
+    # response (ask for the mode)
+    textToSpeech("Hey what do you want me to do today?")
+    # wait for user to give the mode
+    transcription, keyword = listen_until_keyword(api_key, mode_words, recognizer, microphone)
+    
+    mode = 0
+    # mode 1 = LOVER, mode 2 = TRAVEL
+    if keyword in modes_dictionary["lovermode_words"]:
+        print("1", keyword)
+        mode = 1
+    if keyword in modes_dictionary["travel_words"]:
+        print("2", keyword)
+        mode = 2
+    
+    return mode
 
-    # common_hallucination = 'thank you for watching'
-    # if not transcription.text.strip() or transcription.text.lower() == '.' or common_hallucination.lower() in transcription.text.lower():
-    #     print("Pause detected, stopping recording.")
-    #     break
-    # print("Transcription:", transcription.text)
-
-    return transcription
+def mainLoop(api_key, recognizer, microphone):
+    # always listens until a pause
+    # generate response
+    
+    # continues until it deactivates somehow
+    while True:
+        # listens until a pause
+        transcription = listen(recognizer, microphone, api_key)
+        # get a response from GEMINI
+        
 
 def main():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    simliar_wakeup_words = [
-        "Hey, Emilia",
-        "A, Amelia",
-        "Say, Amelia",
-        "Hey, Familia",  
-        "Hey, Ophelia",
-        "Hey, Camellia",
-        "They, Amelia",
-        "Hey, Amelia",
-        "Hey, Cecilia",
-        "Play, Amelia",
-        "Stay, Amelia",
-        "May, Amelia",
-        "Lay, Amelia",
-        "Hey, Media",
-        "Hey, Amalia",
-        "Hey, Emilio"
-    ]
+    
     # create recognizer and mic instances
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
     adjust_ambient_noise(recognizer, microphone)
-    listen_until_keyword(OPENAI_API_KEY, simliar_wakeup_words, recognizer, microphone)
-    # listen(recognizer, microphone, OPENAI_API_KEY)
+    
+    # call start up
+    startUp(OPENAI_API_KEY, recognizer, microphone)
+    # main loop
+    mainLoop(OPENAI_API_KEY, recognizer, microphone)
+    
 
 if __name__ == '__main__':
     main()
