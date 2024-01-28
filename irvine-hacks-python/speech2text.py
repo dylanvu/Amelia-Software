@@ -4,6 +4,9 @@ import os
 from text2speech import textToSpeech
 # from recognize_whisper_api import recognize_whisper_api as whisper_api
 load_dotenv()
+# maybe
+import threading
+import time
 
 
 # def find_microphone_index(device='USBAudio2.0'):
@@ -159,7 +162,7 @@ def startUp(api_key, recognizer, microphone):
         print("2", keyword)
         mode = 2
     
-    return mode
+    return transcription, mode
 
 def mainLoop(api_key, recognizer, microphone):
     # always listens until a pause
@@ -172,14 +175,28 @@ def mainLoop(api_key, recognizer, microphone):
         # get a response from GEMINI
         
 
+# returns transcription, mode
+def init(api_key, recognizer, microphone):
+    OPENAI_API_KEY = api_key
+    adjust_ambient_noise(recognizer, microphone)
+    # call start up
+    return startUp(OPENAI_API_KEY, recognizer, microphone)
+
+
+def await_listen(OPENAI_API_KEY, recognizer, microphone, pauses=3):
+    for _ in range(pauses):
+        transcription = listen(recognizer, microphone, OPENAI_API_KEY)
+        if len(transcription) > 0:
+            return transcription
+    return "goodbye"
+
+
 def main():
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    
     # create recognizer and mic instances
     recognizer = sr.Recognizer()
     microphone = sr.Microphone()
     adjust_ambient_noise(recognizer, microphone)
-    
     # call start up
     startUp(OPENAI_API_KEY, recognizer, microphone)
     # main loop
