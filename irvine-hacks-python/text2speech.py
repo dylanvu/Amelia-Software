@@ -13,7 +13,7 @@ from google.cloud import translate_v2 as translate
 from playsound import playsound
 import os
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = './google_secret_key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../google_secret_key.json'
 
 # Function to turn Text into speech
 # text: (str) to be played out
