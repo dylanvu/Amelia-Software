@@ -137,6 +137,8 @@ while active:
             },
         }
 
+        textToSpeech("Okay, let me think.")
+
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
         # using the stop sequence, add a } to after
@@ -185,10 +187,10 @@ while active:
         # implement seeing
         picture = ""
         if see.lower() == "true":
-            textToSpeech("I'll take a look.")
+            textToSpeech("I'll take a look. Please wait!")
             picture = sendImage()
             print("Picture taken")
-            textToSpeech("Okay, let me think.")
+            textToSpeech("Got it! Let me think...")
 
         isContinue = action["continue"].lower() == "true"
 
