@@ -96,37 +96,27 @@ def startUp(api_key, recognizer, microphone):
         "Hey",
         "A",
         "Say",
-        "Hey",
-        "Hey",
-        "Hey",
         "They",
-        "Hey",
-        "Hey",
         "Play",
         "Stay",
         "May",
         "Lay",
         "Hey",
-        "Hey",
-        "Hey"
+        "Hi"
         ],
         [
+        "Leo",
+        "I'm Leo",
         "Emilia",
-        "Amelia",
         "Amelia",
         "Familia",
         "Ophelia",
         "Camellia",
-        "Amelia",
-        "Amelia",
         "Cecilia",
         "Amelia",
-        "Amelia",
-        "Amelia",
-        "Amelia",
         "Media",
-        "Amalia",
-        "Emilio"
+        "Emilio",
+        "Emelia"
     ]]
     
     mode_words = [
@@ -211,7 +201,8 @@ def listen_until_wake(api_key, recognizer, microphone):
         "Cecilia",
         "Amelia",
         "Media",
-        "Emilio"
+        "Emilio",
+        "Emelia"
     ]]
     while True:
         transcription = listen(recognizer, microphone, api_key)
