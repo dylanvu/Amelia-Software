@@ -7,6 +7,8 @@ from text2speech import textToSpeech
 from rpiSerial import sendCommand
 import speech2text
 import speech_recognition as sr
+import time
+import serial
 
 load_dotenv()  # take environment variables from .env.
 
@@ -26,6 +28,11 @@ GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemi
 '''
 # and will alternate between user -> model, always ending in model
 history = []
+
+port = "/dev/ttyUSB0" # rpi
+# port = "COM8" # windows
+ser = serial.Serial(port=port, baudrate=115200, timeout=0.1)
+time.sleep(2)
 
 commandDictionary = {
     "FORWARD": "0",
@@ -166,7 +173,7 @@ while active:
         if len(move.lower()) > 0:
         #     # TODO - send an ascii character 0 to 4 to RX TX
             commandChar = commandDictionary[move]
-            sendCommand(commandChar)
+            sendCommand(commandChar, ser)
             print(move)
 
         # implement seeing
