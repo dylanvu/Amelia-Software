@@ -138,7 +138,7 @@ while active:
         # turn the json string to an object
         action = json.loads(actionString)
         print(action) # DEBUG
-        print() # DEBUG
+        # print() # DEBUG
 
         # process all the actions
         speak = action["SPEAK"]
@@ -216,4 +216,4 @@ while active:
                     }
                 )
 
-        print("history:", history) # DEBUG
+        # print("history:", history) # DEBUG
