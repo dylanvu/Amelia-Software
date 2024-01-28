@@ -77,6 +77,7 @@ while active:
 
     # the meat of the loop
     isContinue = True
+    continuing = False
 
     while isContinue:
         
@@ -137,7 +138,11 @@ while active:
             },
         }
 
-        textToSpeech("Okay, let me think.")
+        # special text if Amelia is acting autonomously
+        if continuing:
+            textToSpeech("I need to figure out what to do next.")
+        else:
+            textToSpeech("Let me think...")
 
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
@@ -146,8 +151,12 @@ while active:
         try:
             actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         except Exception as e:
+            print(res.json())
             print("actionString exception")
-            textToSpeech("I didn't quite catch that, sorry!")
+            if continuing:
+                textToSpeech("I'm confused now. I'll stop what I'm doing.")
+            else:
+                textToSpeech("I didn't quite catch that, sorry!")
             continue
         
         action = None
@@ -157,7 +166,10 @@ while active:
         except Exception as e:
             print(actionString)
             print(action) # DEBUG
-            textToSpeech("I didn't quite catch that, sorry!.")
+            if continuing:
+                textToSpeech("I'm confused now. I'll stop what I'm doing.")
+            else:
+                textToSpeech("I didn't quite catch that, sorry!")
             continue
         # print() # DEBUG
 
@@ -193,10 +205,10 @@ while active:
         # implement seeing
         picture = ""
         if see.lower() == "true":
-            textToSpeech("I'll take a look. Please wait!")
+            textToSpeech("I'll need to take a look. Please wait!")
             picture = sendImage()
             print("Picture taken")
-            textToSpeech("Got it! Let me think...")
+            textToSpeech("Okay, I finished looking.")
 
         isContinue = action["continue"].lower() == "true"
 
@@ -225,6 +237,7 @@ while active:
         # if we are continuing
         if isContinue:
             # basically at this point, the API will continue requesting itself
+            continuing = True
             # the user will prompt it with "CONTINUE"
             question = "CONTINUE"
             if len(picture) > 0:
@@ -238,5 +251,8 @@ while active:
                         }
                     }
                 )
+        else:
+            # no autonomy
+            continuing = False
 
         # print("history:", history) # DEBUG
