@@ -20,3 +20,5 @@
     * First, connect the ground betwee nthe pi and the arduino
     * Then, run `sudo chmod 666 /dev/ttyS0`
     * Remember to match the baud rates: `stty -F /dev/ttyS0 <baud_rate>`
+* Installing python versions, using pyenv: https://github.com/pyenv/pyenv
+    * Use `pyenv global <version>` to swap versions
