@@ -1,3 +1,5 @@
+# temp
+
 from dotenv import load_dotenv
 import os
 import requests
@@ -49,13 +51,11 @@ microphone = sr.Microphone()
 transcription, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
 # mode = 0 --> travel
 # mode = 1 --> lovers
-# if mode == 1:
-#     question = "Hey amelia, we are lovers!"
-# elif mode == 2:
-#     question = "Hey amelia, we are travel companions"
-# else:
-#     question = transcription
-print("Starting Question:", question)
+
+prompt_file = 'travel_prompt.txt' if mode == 0 else 'partner_prompt.txt'
+
+question = transcription
+# print("Starting Question:", question)
 print("Mode:", mode)
 
 while active:
@@ -63,7 +63,8 @@ while active:
         textToSpeech("What should I do now?")
         print("What should I do now?") # debug
         # question = input()
-        question = speech2text.await_listen(OPENAI_API_KEY, recognizer, microphone)
+        # question = speech2text.await_listen(OPENAI_API_KEY, recognizer, microphone)
+        question = speech2text.listen_until_wake(OPENAI_API_KEY, recognizer, microphone)
         
     mode = None
 
@@ -71,13 +72,13 @@ while active:
     isContinue = True
 
     while isContinue:
-
+        
         prompt = [
             {
                 "text": "Who are you?"
             },
             {
-                "text": open("prompt.txt", 'r').read()
+                "text": open('irvine-hacks-python/'+prompt_file, 'r').read()
             },
             {
                 "text": "Ignore this photo."

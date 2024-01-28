@@ -2,11 +2,8 @@ import speech_recognition as sr
 from dotenv import load_dotenv
 import os
 from text2speech import textToSpeech
-# from recognize_whisper_api import recognize_whisper_api as whisper_api
 load_dotenv()
-# maybe
-import threading
-import time
+
 
 
 # def find_microphone_index(device='USBAudio2.0'):
@@ -33,14 +30,17 @@ def adjust_ambient_noise(recognizer, microphone):
         recognizer.adjust_for_ambient_noise(source, duration=2)
         print("Done adjusting!")
 
-def listen(recognizer, microphone, OPENAI_API_KEY):
+def listen(recognizer, microphone, OPENAI_API_KEY, time_limit=30):
     if not isinstance(recognizer, sr.Recognizer):
         raise TypeError("`recognizer` must be `Recognizer` instance")
     if not isinstance(microphone, sr.Microphone):
         raise TypeError("`microphone` must be `Microphone` instance")
     with microphone as source:
         print("Say something!")
-        audio = recognizer.listen(source)
+        # if time_limit:
+        audio = recognizer.listen(source=source, phrase_time_limit=time_limit)
+        # else:
+        #     audio = recognizer.listen(source,phrase_time_limit=60)
         print("done listening!")
     # recognize speech using Whisper API
     try:
@@ -55,7 +55,7 @@ def listen(recognizer, microphone, OPENAI_API_KEY):
 # stops looking for keyword after it is found
 def listen_until_keyword(api_key, keywords, recognizer, microphone):
     while True:
-        transcription = listen(recognizer, microphone, api_key)
+        transcription = listen(recognizer, microphone, api_key, time_limit=3)
         print("wake-word-listen:",transcription)
         keyword = None
         
@@ -181,6 +181,64 @@ def init(api_key, recognizer, microphone):
     adjust_ambient_noise(recognizer, microphone)
     # call start up
     return startUp(OPENAI_API_KEY, recognizer, microphone)
+
+
+def listen_until_wake(api_key, recognizer, microphone):
+    # initializing words list
+    simliar_wakeup_words = [
+        [
+        "Hey",
+        "A",
+        "Say",
+        "Hey",
+        "Hey",
+        "Hey",
+        "They",
+        "Hey",
+        "Hey",
+        "Play",
+        "Stay",
+        "May",
+        "Lay",
+        "Hey",
+        "Hey",
+        "Hey"
+        ],
+        [
+        "Emilia",
+        "Amelia",
+        "Amelia",
+        "Familia",
+        "Ophelia",
+        "Camellia",
+        "Amelia",
+        "Amelia",
+        "Cecilia",
+        "Amelia",
+        "Amelia",
+        "Amelia",
+        "Amelia",
+        "Media",
+        "Amalia",
+        "Emilio"
+    ]]
+    while True:
+        transcription = listen(recognizer, microphone, api_key)
+        print("wake-word-listen:",transcription)
+        keyword = None
+        for greeting in simliar_wakeup_words[0]:
+            if greeting.lower() in transcription.lower() and \
+            any(name.lower() in transcription.lower() for name in simliar_wakeup_words[1]):
+                print("Keyword detected...")
+                keyword = greeting.lower()
+                print("keyword")
+                break
+        if keyword:
+            index = transcription.lower().find(keyword)
+            new_transcription = transcription[index:]
+            break
+    return new_transcription
+        
 
 
 def await_listen(OPENAI_API_KEY, recognizer, microphone, pauses=3):
