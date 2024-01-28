@@ -78,7 +78,7 @@ while active:
                 "text": "Who are you?"
             },
             {
-                "text": open('irvine-hacks-python/'+prompt_file, 'r').read()
+                "text": open('./irvine-hacks-python/' + prompt_file, 'r').read()
             },
             {
                 "text": "Ignore this photo."
@@ -163,12 +163,12 @@ while active:
             isContinue = 'false' # TESTTTTTTT
 
         # # implement movement
-        # sendCommand("5")
-        # if len(move.lower()) > 0:
+        sendCommand("5")
+        if len(move.lower()) > 0:
         #     # TODO - send an ascii character 0 to 4 to RX TX
         #     commandChar = commandDictionary[move]
         #     sendCommand(commandChar)
-        #     print(move)
+            print(move)
 
         # implement seeing
         picture = ""
