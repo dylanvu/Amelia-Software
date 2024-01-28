@@ -4,11 +4,16 @@ import requests
 import json
 from camera import sendImage
 from text2speech import textToSpeech
-# from rpiSerial import sendCommand
+from rpiSerial import sendCommand
 import speech2text
 import speech_recognition as sr
+import time
+import serial
 
 load_dotenv()  # take environment variables from .env.
+
+textToSpeech("Give me a moment to figure out what's going on.")
+
 
 KEY = os.getenv("GEMINI_API_KEY")
 # GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={KEY}"
@@ -26,6 +31,11 @@ GEMINI_ENDPOINT = f"https://generativelanguage.googleapis.com/v1beta/models/gemi
 '''
 # and will alternate between user -> model, always ending in model
 history = []
+
+port = "/dev/ttyUSB0" # rpi
+# port = "COM8" # windows
+ser = serial.Serial(port=port, baudrate=115200, timeout=0.1)
+time.sleep(2)
 
 commandDictionary = {
     "FORWARD": "0",
@@ -70,6 +80,7 @@ while active:
 
     # the meat of the loop
     isContinue = True
+    continuing = False
 
     while isContinue:
         
@@ -78,7 +89,7 @@ while active:
                 "text": "Who are you?"
             },
             {
-                "text": open('irvine-hacks-python/'+prompt_file, 'r').read()
+                "text": open(prompt_file, 'r').read()
             },
             {
                 "text": "Ignore this photo."
@@ -130,21 +141,40 @@ while active:
             },
         }
 
+        # special text if Amelia is acting autonomously
+        if continuing:
+            textToSpeech("I need to figure out what to do next.")
+        else:
+            textToSpeech("Let me think...")
+
         res = requests.post(GEMINI_ENDPOINT, json = reqObj)
 
         # using the stop sequence, add a } to after
-        print(res.json(),'\n') # DEBUG
+        # print(res.json(),'\n') # DEBUG
         try:
             actionString = res.json()["candidates"][0]["content"]["parts"][0]["text"] + "}"
         except Exception as e:
+            print(res.json())
             print("actionString exception")
-            textToSpeech("I did not quite catch that.")
+            if continuing:
+                textToSpeech("I'm confused now. I'll stop what I'm doing.")
+            else:
+                textToSpeech("I didn't quite catch that, sorry!")
             continue
-
-        # turn the json string to an object
-        action = json.loads(actionString)
-        print(action) # DEBUG
-        print() # DEBUG
+        
+        action = None
+        try:
+            # turn the json string to an object
+            action = json.loads(actionString)
+        except Exception as e:
+            print(actionString)
+            print(action) # DEBUG
+            if continuing:
+                textToSpeech("I'm confused now. I'll stop what I'm doing.")
+            else:
+                textToSpeech("I didn't quite catch that, sorry!")
+            continue
+        # print() # DEBUG
 
         # process all the actions
         speak = action["SPEAK"]
@@ -168,19 +198,20 @@ while active:
         if too_many_repeat_movements >= 2:
             isContinue = 'false' # TESTTTTTTT
 
-        # # implement movement
-        # sendCommand("5")
-        # if len(move.lower()) > 0:
+        # implement movement
+        if len(move.lower()) > 0:
         #     # TODO - send an ascii character 0 to 4 to RX TX
-        #     commandChar = commandDictionary[move]
-        #     sendCommand(commandChar)
-        #     print(move)
+            commandChar = commandDictionary[move]
+            sendCommand(commandChar, ser)
+            print(move)
 
         # implement seeing
         picture = ""
         if see.lower() == "true":
+            textToSpeech("I'll need to take a look. Please wait!")
             picture = sendImage()
             print("Picture taken")
+            textToSpeech("Okay, I finished looking.")
 
         isContinue = action["continue"].lower() == "true"
 
@@ -209,6 +240,7 @@ while active:
         # if we are continuing
         if isContinue:
             # basically at this point, the API will continue requesting itself
+            continuing = True
             # the user will prompt it with "CONTINUE"
             question = "CONTINUE"
             if len(picture) > 0:
@@ -222,5 +254,8 @@ while active:
                         }
                     }
                 )
+        else:
+            # no autonomy
+            continuing = False
 
-        print("history:", history) # DEBUG
+        # print("history:", history) # DEBUG

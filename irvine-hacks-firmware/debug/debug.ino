@@ -1,8 +1,11 @@
+#include <LiquidCrystal_I2C.h>
 // functions for movement
+
+LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 // counter for how long to drive for, before stopping/switching movement options
 // tweak this variable to affect how far the bot drives
-const static int movementTimeLimit = 3000;
+const static int movementTimeLimit = 100;
 
 int incomingByte = 52;
 bool moving = false;
@@ -47,6 +50,13 @@ void setup()
     pinMode(RIGHT_SIDE_2, OUTPUT);
     pinMode(LEFT_SIDE_1, OUTPUT);
     pinMode(LEFT_SIDE_2, OUTPUT);
+
+    lcd.init(); // initialize the lcd
+    lcd.backlight();
+    lcd.clear();                 
+    lcd.setCursor(0, 0); 
+    lcd.print("Hi");
+    
 }
 
 void loop()
@@ -72,6 +82,10 @@ void loop()
 
         // set current movement to be this command
         currentMovement = incomingByte;
+
+        lcd.clear();                 
+        lcd.setCursor(0, 0);        
+        lcd.print(incomingByte);
     }
 
     // execute current movement
@@ -92,42 +106,45 @@ void loop()
         // "0"
         Serial.println("FORWARD");
         moved = true;
-        Forward();
+        lcd.clear();                 
+        lcd.setCursor(0, 0);     
+        lcd.print("FORWARD");
+        // Forward();
         break;
     case 49:
         // "1"
         Serial.println("BACKWARD");
         moved = true;
-        turnBack();
+        // turnBack();
         break;
     case 50:
         // "2"
         Serial.println("TURNLEFT");
         moved = true;
-        turnLeft();
+        // turnLeft();
         break;
     case 51:
         // "3"
         Serial.println("TURNRIGHT");
         moved = true;
-        turnRight();
+        // turnRight();
         break;
     case 52:
         // "4"
         // Serial.println("WAIT");
         moved = true;
-        stop();
+        // stop();
         break;
     case 53:
         // "5"
         // meant for debugging UART communication
-        digitalWrite(2, HIGH);
+        // digitalWrite(2, HIGH);
         break;
     default:
         // Serial.println("UNKNOWN");
         // TODO: make it wait
         moved = false;
-        stop();
+        // stop();
         // digitalWrite(2, HIGH);
         break;
     }
@@ -143,6 +160,9 @@ void loop()
     if (moveCounter > movementTimeLimit)
     {
         Serial.println("Done");
+        lcd.clear();                 
+        lcd.setCursor(0, 0);     
+        lcd.print("Done");
         // stop moving
         moving = false;
         moveCounter = 0;
