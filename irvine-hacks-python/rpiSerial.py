@@ -8,7 +8,7 @@ def sendCommand(command, ser):
     # while True:
         # pass
     # print(commandBytes)
-    ser.close()
+    # ser.close()
 
 if __name__ == "__main__":
     sendCommand("0")

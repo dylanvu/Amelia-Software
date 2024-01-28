@@ -51,6 +51,8 @@ Other members learned how to utilze ai / nlp tools in an application. More usefu
     * Remember to match the baud rates: `stty -F /dev/ttyS0 <baud_rate>`
 * Installing python versions, using pyenv: https://github.com/pyenv/pyenv
     * Use `pyenv global <version>` to swap versions
+* Check all open tty ports
+    * `ls /dev/tty*`
 
 # Installation and Deployment
 * Our code works with Python version 3.8.0
