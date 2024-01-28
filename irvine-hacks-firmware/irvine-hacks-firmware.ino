@@ -11,11 +11,15 @@ int currentMovement = 0;
 
 const int ENABLE = 2;
 // Motor 1
-const int AA1 = 3;
-const int AA2 = 4;
+// right side
+const int RIGHT_SIDE_1 = 3;
+const int RIGHT_SIDE_2 = 4;
 // Motor 2
-const int AA3 = 18;
-const int AA4 = 19;
+// left side
+const int LEFT_SIDE_1 = 18;
+const int LEFT_SIDE_2 = 19;
+
+const int ON_PERCENT = 0.78;
 
 // function declarations
 void turnRight();
@@ -30,6 +34,12 @@ void setup()
     Serial.println("Ready to move!");
     // DEBUG UART
     pinMode(2, OUTPUT);
+
+    // set pin modes of motor
+    pinMode(RIGHT_SIDE_1, OUTPUT);
+    pinMode(RIGHT_SIDE_2, OUTPUT);
+    pinMode(LEFT_SIDE_1, OUTPUT);
+    pinMode(LEFT_SIDE_2, OUTPUT);
 }
 
 void loop()
@@ -136,22 +146,22 @@ void loop()
 void turnRight()
 {
 
-    digitalWrite(AA1, HIGH);
-    digitalWrite(AA2, LOW);
+    digitalWrite(RIGHT_SIDE_1, HIGH); // HIGH --> reverse, LOW --> forward
+    digitalWrite(RIGHT_SIDE_2, LOW);       // LOW --> reverse, HIGH --> forward
 
-    digitalWrite(AA3, LOW);
-    digitalWrite(AA4, HIGH);
+    digitalWrite(LEFT_SIDE_1, LOW);  // LOW --> forward
+    digitalWrite(LEFT_SIDE_2, HIGH); // HIGH --> forward
 
     digitalWrite(ENABLE, HIGH);
 }
 void turnBack()
 {
 
-    digitalWrite(AA1, HIGH);
-    digitalWrite(AA2, LOW);
+    digitalWrite(RIGHT_SIDE_1, HIGH);
+    digitalWrite(RIGHT_SIDE_2, LOW);
 
-    digitalWrite(AA3, HIGH);
-    digitalWrite(AA4, LOW);
+    digitalWrite(LEFT_SIDE_1, HIGH);
+    digitalWrite(LEFT_SIDE_2, LOW);
 
     digitalWrite(ENABLE, HIGH);
 }
@@ -159,11 +169,11 @@ void turnBack()
 void turnLeft()
 {
 
-    digitalWrite(AA1, LOW);
-    digitalWrite(AA2, HIGH);
+    digitalWrite(RIGHT_SIDE_1, LOW);
+    digitalWrite(RIGHT_SIDE_2, HIGH);
 
-    digitalWrite(AA3, HIGH);
-    digitalWrite(AA4, LOW);
+    digitalWrite(LEFT_SIDE_1, HIGH);
+    digitalWrite(LEFT_SIDE_2, LOW);
 
     digitalWrite(ENABLE, HIGH);
 }
@@ -171,11 +181,11 @@ void turnLeft()
 void Forward()
 {
 
-    digitalWrite(AA1, LOW);
-    digitalWrite(AA2, HIGH);
+    digitalWrite(RIGHT_SIDE_1, LOW);
+    digitalWrite(RIGHT_SIDE_2, HIGH);
 
-    digitalWrite(AA3, LOW);
-    digitalWrite(AA4, HIGH);
+    digitalWrite(LEFT_SIDE_1, LOW);
+    digitalWrite(LEFT_SIDE_2, HIGH);
 
     digitalWrite(ENABLE, HIGH);
 }
