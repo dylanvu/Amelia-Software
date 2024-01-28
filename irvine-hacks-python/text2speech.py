@@ -27,7 +27,7 @@ def textToSpeech(text):
     
     #get correct voice bank
     voiceArr = findCorrectVoice(langTo)
-    print(voiceArr[0], voiceArr[1])
+    # print(voiceArr[0], voiceArr[1])
     
     # choose text to be synthesized
     synthesis_input = texttospeech.SynthesisInput(text=text)
@@ -52,13 +52,21 @@ def textToSpeech(text):
 
     # The response's audio_content is binary.
     filename = "output.mp3"
+
+    # Check if the file already exists
+    if os.path.exists(filename):
+        os.remove(filename)
+        # print(f"Previous {filename} removed.")
+
     with open(filename, "wb") as out:
         out.write(response.audio_content)
-        print('Audio content written to file filename')
+        # print('Audio content written to file filename')
         out.close()
     
     # play sound to speakers
     playsound(filename)
+
+    # delete the file
 
 # function to grab voice selection and language code
 # lang_code: (str) string that says what language it should be translated to
@@ -75,15 +83,14 @@ def findCorrectVoice(lang_code):
             return [voice.name, voice.language_codes[0]]
 
 
-# # TextToSpeech("I am a woman", "en-US", False)
-# # TextToSpeech("Tôi tên là Amelia.")
+# TextToSpeech("I am a woman", "en-US", False)
+# TextToSpeech("Tôi tên là Amelia.")
 # textToSpeech("Tôi yêu đàn ông.")
 
-# # print(translateText("I am a woman", "vi"))
+# print(translateText("I am a woman", "vi"))
 
-# # listVoices("vi")
+# listVoices("vi")
 
-# # print(findCorrectVoice("vi"))
-
+# print(findCorrectVoice("vi"))
 
 
