@@ -1,12 +1,10 @@
-# temp
-
 from dotenv import load_dotenv
 import os
 import requests
 import json
 from camera import sendImage
 from text2speech import textToSpeech
-from rpiSerial import sendCommand
+# from rpiSerial import sendCommand
 import speech2text
 import speech_recognition as sr
 
@@ -48,17 +46,17 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # create recognizer and mic instances
 recognizer = sr.Recognizer()
 microphone = sr.Microphone()
-transcription, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
+question, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
+print("past init")
 # mode = 0 --> travel
 # mode = 1 --> lovers
 prompt_file = 'travel_prompt.txt' if mode == 0 else 'partner_prompt.txt'
-question = transcription
 print("Mode:", mode)
 
 too_many_repeat_movements = 0
 current_movement = ''
 
-question = transcription
+# question = transcription
 
 while active:
     if mode is None:
@@ -164,13 +162,13 @@ while active:
         if too_many_repeat_movements >= 2:
             isContinue = 'false' # TESTTTTTTT
 
-        # implement movement
-        sendCommand("5")
-        if len(move.lower()) > 0:
-            # TODO - send an ascii character 0 to 4 to RX TX
-            commandChar = commandDictionary[move]
-            sendCommand(commandChar)
-            print(move)
+        # # implement movement
+        # sendCommand("5")
+        # if len(move.lower()) > 0:
+        #     # TODO - send an ascii character 0 to 4 to RX TX
+        #     commandChar = commandDictionary[move]
+        #     sendCommand(commandChar)
+        #     print(move)
 
         # implement seeing
         picture = ""
