@@ -78,7 +78,7 @@ while active:
                 "text": "Who are you?"
             },
             {
-                "text": open('./irvine-hacks-python/' + prompt_file, 'r').read()
+                "text": open(prompt_file, 'r').read()
             },
             {
                 "text": "Ignore this photo."
