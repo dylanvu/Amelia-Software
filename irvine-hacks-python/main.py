@@ -5,6 +5,8 @@ import json
 from camera import sendImage
 from text2speech import textToSpeech
 from rpiSerial import sendCommand
+import speech2text
+import speech_recognition as sr
 
 load_dotenv()  # take environment variables from .env.
 
@@ -33,13 +35,37 @@ commandDictionary = {
     "WAIT": "4"
 }
 
+### start 
 question = "What do you know about Mount Everest?"
+active = True
 
 
-while True:
-    print("What should I do now?")
-    question = input()
+# mode == 1: lovermode
+# mode == 2: travelmode
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# create recognizer and mic instances
+recognizer = sr.Recognizer()
+microphone = sr.Microphone()
+transcription, mode = speech2text.init(OPENAI_API_KEY, recognizer, microphone)
+# mode = 0 --> travel
+# mode = 1 --> lovers
+# if mode == 1:
+#     question = "Hey amelia, we are lovers!"
+# elif mode == 2:
+#     question = "Hey amelia, we are travel companions"
+# else:
+#     question = transcription
+print("Starting Question:", question)
+print("Mode:", mode)
 
+while active:
+    if mode is None:
+        textToSpeech("What should I do now?")
+        print("What should I do now?") # debug
+        # question = input()
+        question = speech2text.await_listen(OPENAI_API_KEY, recognizer, microphone)
+        
+    mode = None
 
     # the meat of the loop
     isContinue = True
@@ -122,6 +148,11 @@ while True:
             textToSpeech(speak)
             print(speak)
 
+        # if speak contains 'goodbye' end program instantly
+        if 'goodbye' in speak.lower():
+            active = False
+            break
+
         # implement movement
         # sendCommand("5")
         if len(move.lower()) > 0:
@@ -177,4 +208,4 @@ while True:
                     }
                 )
 
-        # print(history)
+        print("history:", history) # DEBUG
