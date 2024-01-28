@@ -69,6 +69,16 @@ def textToSpeech(text):
     sound = pygame.mixer.Sound(filename)
     sound.play()
 
+    # one method to play sounds synchronously instead of async
+    sound_length = sound.get_length() * 1000 # miliseconds to seconds
+    pygame.time.delay(int(sound_length))
+
+    # # another method
+    # channel = sound.play()
+    # while channel.get_busy():
+    #     pygame.time.delay(100)
+
+
 
 # function to grab voice selection and language code
 # lang_code: (str) string that says what language it should be translated to
